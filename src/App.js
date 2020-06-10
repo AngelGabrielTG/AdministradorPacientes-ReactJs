@@ -15,6 +15,15 @@ function App() {
     ]);
   }
 
+  //FUNCION QUE ELIMINA UNA CITA POR SU ID
+  const eliminarCita = id => {
+    const nuevaCitas = citas.filter(cita => cita.id !== id);
+    guardarCitas(nuevaCitas);
+  }
+
+  //MENSAJE CONDICIONAL
+  const titulo = citas.length === 0 ? 'No hay citas' : 'Administra tus Citas';
+
   return (
     <Fragment>
       <h1>Administrar Pacientes</h1>
@@ -26,11 +35,12 @@ function App() {
             />
           </div>
           <div className="one-half column">
-            <h2>Administra tus Citas</h2>
+            <h2>{titulo}</h2>
             {citas.map(cita => (
               <Cita 
                 key={cita.id}
                 cita={cita}
+                eliminarCita={eliminarCita}
               />
             ))}
           </div>
