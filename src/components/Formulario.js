@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
+import uuid from 'uuid/dist/esm-browser/v4';
 
-const Formulario = () => {
+const Formulario = ({crearCita}) => {
 
     //CREAR STATE DE CITAS
     const [cita, actualizarCita] = useState({
@@ -10,6 +11,9 @@ const Formulario = () => {
         hora: '',
         sintomas: ''
     });
+
+    //STATE PARA VALIDAR LOS CAMPOS VACIOS
+    const [error, actualizarError] = useState(false);
 
     //FUNCION CUANDO EL USUARIO ESCRIBE EN EL FORMULARIO
     const actualizarState = e =>{
@@ -27,17 +31,33 @@ const Formulario = () => {
         e.preventDefault();
 
         //VALIDAR LOS CAMPOS DEL FORMULARIO
-
+        if( mascota.trim() === '' || propietario.trim() === '' || fecha.trim() === '' || hora.trim() === '' || sintomas.trim() === '' ){
+            actualizarError(true);
+            return;
+        }
+        
+        //ELIMINAR EL MENSAJE DE ERROR
+        actualizarError(false);
 
         //ASIGNAR UN ID
+        cita.id = uuid();
 
         //CREAR LA CITA
+        crearCita(cita);
 
         //REAINICIAR EL FORM
+        actualizarCita({
+            mascota: '',
+            propietario: '',
+            fecha: '',
+            hora: '',
+            sintomas: ''
+        })
     }
     return ( 
         <Fragment>
             <h2>Crear Cita</h2>
+            { error ? <p className="alerta-error">Todos los campos son obligatorios</p> : null }
             <form
                 onSubmit={submitCita}
             >
